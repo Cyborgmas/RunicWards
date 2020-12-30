@@ -13,8 +13,8 @@ import java.util.UUID;
 import static com.cyborgmas.runic_wards.RunicWards.MOD_ID;
 
 public class Util {
-    public static final Integer RUNIC_WARD_MAX = 64;
-
+    public static final Integer RUNIC_WARD_MAX = 30;
+    public static final Integer RUNIC_WARD_MIN = -30;
 
     public static int getWardsValue(LivingEntity entity) {
         if (entity instanceof PlayerEntity) // For now only handle player entities

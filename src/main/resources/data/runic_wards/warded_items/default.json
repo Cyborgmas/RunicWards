@@ -2,15 +2,19 @@
   "warded_items" : [
     {
       "item" : "minecraft:golden_helmet",
-      "value" : 1
+      "value" : 30
     },
     {
       "item" : "golden_chestplate",
-      "value" : 2
+      "value" : 26
     },
     {
       "item" : "minecraft:golden_leggings",
-      "value" : 1
+      "value" : 23
+    },
+    {
+      "item" : "minecraft:golden_boots",
+      "value" : -10
     }
   ],
   "damage_types" : [

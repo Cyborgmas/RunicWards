@@ -26,7 +26,7 @@ public class RunicWards
     private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, RunicWards.MOD_ID);
 
     public static final RegistryObject<Attribute> RUNIC_WARD = ATTRIBUTES.register("generic.runic_ward", () ->
-            new RangedAttribute("attribute.name.generic.runic_ward", 0, 0, Util.RUNIC_WARD_MAX).setShouldWatch(true));
+            new RangedAttribute("attribute.name.generic.runic_ward", 0, Util.RUNIC_WARD_MIN, Util.RUNIC_WARD_MAX).setShouldWatch(true));
 
     public RunicWards() {
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();

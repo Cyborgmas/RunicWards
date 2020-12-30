@@ -38,7 +38,7 @@ public class WardedItemsManager extends JsonReloadListener {
     public static Codec<List<Pair<Item, Integer>>> WARDED_ITEMS_CODEC =
             Codec.mapPair(
                     ResourceLocation.CODEC.fieldOf("item"),
-                    Codec.intRange(0, Util.RUNIC_WARD_MAX).fieldOf("value")
+                    Codec.intRange(Util.RUNIC_WARD_MIN, Util.RUNIC_WARD_MAX).fieldOf("value")
             ).codec().listOf()
                     .comapFlatMap(l -> {
                         List<ResourceLocation> notloaded = l.stream().map(Pair::getFirst).filter(rl -> !ModList.get().isLoaded(rl.getNamespace())).collect(Collectors.toList());

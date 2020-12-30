@@ -6,7 +6,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -24,11 +23,14 @@ public class HUDRenderer {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR)
             return;
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
 
-        int armor = player.getTotalArmorValue();
-        int wards = Util.getWardsValue(player);
-        if (armor == 0 && wards == 0)
+        int armor = mc.player.getTotalArmorValue();
+        int wards = Util.getWardsValue(mc.player);
+
+        boolean hasArmor = armor != 0;
+        boolean hasWards = wards != 0;
+
+        if (!hasArmor && !hasWards)
             return;
         int width = event.getWindow().getScaledWidth();
         int height = event.getWindow().getScaledHeight();
@@ -36,10 +38,10 @@ public class HUDRenderer {
         mc.textureManager.bindTexture(ICONS);
         RenderSystem.enableBlend();
 
-        if (armor != 0)
+        if (hasArmor)
             render(event.getMatrixStack(), armor, width, height, false, false);
-        if (wards != 0)
-            render(event.getMatrixStack(), wards, width, height, true, armor != 0);
+        if (hasWards)
+            render(event.getMatrixStack(), wards, width, height, true, hasArmor);
 
         RenderSystem.disableBlend();
         mc.textureManager.bindTexture(AbstractGui.GUI_ICONS_LOCATION);
@@ -53,24 +55,39 @@ public class HUDRenderer {
         left += onRight ? (8 * 5) : 0;
         int top = height - left_height;
 
-        int texY = ward ? 9 : 0;
+        boolean neg = value < 0;
+        int extra = value - 20;
 
-        for (int i = 1; i < 20; i += 4)
-        {
+        value = Math.min(Math.abs(value), 20);
+
+        int initTexY = ward ? neg ? 18 : 9 : 0;
+
+        for (int j = 0; j < 5; j++) {
+            int i = 1 + j * (neg ? 2 : 4);
             int texX = 0;
+            int texY = initTexY;
 
-            if (i < value)
-            {
-                if ((value - i + 1) >= 4)
-                    texX = 4;
-                else if ((value - i + 1) % 3 == 0)
-                    texX = 3;
-                else
+            if (!neg) {
+                if (extra > j) // handle 20 -> 30
+                    texX = (extra - 5) > j ? 6 : 5;
+                else {
+                    if (i < value) { //handle 0 -> 20
+                        if ((value - i + 1) >= 4)
+                            texX = 4;
+                        else if ((value - i + 1) % 3 == 0)
+                            texX = 3;
+                        else
+                            texX = 2;
+                    }
+                    else if (i == value) {
+                        texX = 1;
+                    }
+                }
+            } else { //handle -10 -> 0
+                if (i < value)
                     texX = 2;
-            }
-            else if (i == value)
-            {
-                texX = 1;
+                else if (i == value)
+                    texX = 1;
             }
 
             AbstractGui.blit(mStack, left, top, 0, texX * 9, texY, 9, 9, 256, 256);
