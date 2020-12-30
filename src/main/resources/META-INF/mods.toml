@@ -11,7 +11,7 @@ description='''Adds the runic wards attribute, the equivalent of armor but for d
 [[dependencies.runic_wards]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[35,)" #mandatory
+    versionRange="[35.1.17,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.runic_wards]]
